@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+  <script>
+
+function aclear(arr) {
+
+            let mapSinAnagramas = new Map();
+            for (let palabra of arr) {
+                let ordenada = palabra.toLowerCase().split('').sort().join('');
+                
+//console.log
+(`Palabra ${palabra} : Ordenada ${ordenada}`);
+                if (!mapSinAnagramas.has(ordenada)) {
+                    mapSinAnagramas.set(ordenada, palabra);
+                }
+
+            }
+            return Array.from(mapSinAnagramas.values());
+
+
+        }
+        let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
+
+        alert(aclear(arr)); 
+ </script>
+
+</body>
+</html>

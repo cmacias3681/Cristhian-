@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script>
+
+        /*
+        Ejercicios Incluidos
+        A continuación, se presentan los ejercicios incluidos en este repositorio:
+        
+        Promises y Callbacks
+        Ejercicio 1: Callbacks: Escribe una función que utilice un callback para imprimir "Hola, mundo" después de 2 segundos de ejecución.
+
+        Promises Básicas
+        Ejercicio 2: Promises: Crea una Promise que se resuelva después de 3 segundos y luego imprima "Promise resuelta" cuando se cumpla.
+        
+        Ejercicio 3: async/await: Define una función asincrónica que espere 1 segundo y luego devuelva una cadena que diga "Operación completada". Utiliza async/await.
+        
+        Manejo de Errores con Promises
+        Ejercicio 4: Manejo de errores con Promises: Crea una Promise que se rechace después de 2 segundos y captura el error para imprimir "Error: Promise rechazada".
+        Encadenamiento de Promises
+        Ejercicio 5: Encadenamiento de Promises: Crea tres Promises consecutivas, donde cada una se resuelva después de 1 segundo y devuelva un número diferente. Luego, encadena las tres Promises para sumar los resultados y mostrar el resultado final.
+        Llamadas a APIs
+        Ejercicio 6: Llamada a una API con fetch(): Utiliza el método fetch() para obtener datos de una API de tu elección. Imprime los datos resultantes en la consola.
+        
+        Ejercicio 7: Llamada a una API con Axios: Realiza una llamada a una API utilizando Axios. Muestra los datos obtenidos en la consola.
+        
+        Ejercicio 8: Manipulación de datos de una API: Después de realizar una llamada a una API con fetch(), utiliza el método .then() para filtrar los datos y mostrar solo los elementos que cumplan ciertos criterios (por ejemplo, mostrar solo los nombres que comiencen con "A").
+        
+        async/await con APIs
+        Ejercicio 9: Async/await con llamadas a APIs: Crea una función asincrónica que realice una llamada a una API utilizando Axios y luego manipule los datos recibidos para mostrar información específica.
+        Promise.all() y Promise.allSettled()
+        Ejercicio 10: Promise.all(): Crea tres Promises que se resuelvan después de diferentes intervalos de tiempo y luego utiliza Promise.all() para mostrar un mensaje cuando todas se hayan resuelto.
+        
+        Ejercicio 11: Promise.allSettled(): Realiza tres Promises, algunas de las cuales se resuelvan y otras se rechacen. Utiliza Promise.allSettled() para obtener información sobre el estado de todas las Promises.
+        
+        async/await en un bucle
+        Ejercicio 12: async/await en un bucle: Crea un bucle que realice llamadas asincrónicas utilizando async/await para procesar una lista de elementos uno por uno.
+        Manejo de Errores en llamadas a APIs
+        Ejercicio 13: Manejo de errores en llamadas a APIs: Realiza una llamada a una API con Axios y maneja posibles errores utilizando try/catch para mostrar un mensaje de error en caso de fallo.
+        Encadenamiento de Promises con manipulación de datos
+        Ejercicio 14: Encadenamiento de Promises con manipulación de datos: Realiza una llamada a una API con fetch() y, después de recibir los datos, encadena Promises para realizar varias operaciones de manipulación de datos, como filtrar, mapear o reducir los resultados.
+        Estos ejercicios te ayudarán a practicar y reforzar los conceptos clave de Promises, async/await y llamadas a APIs en JavaScript. ¡Diviértete explorando y mejorando tus habilidades en JavaScript! 
+                
+        */
+
+        //Promises y Callbacks
+
+        //Ejercicio 1: Callbacks: Escribe una función que utilice un callback para imprimir "Hola, mundo" después de 2 segundos de ejecución
+
+        function imprimirHolaMundoConCallback(callback) {
+            setTimeout(function () {
+                callback('Hola, mundo')
+            }, 2000)
+        }
+
+        imprimirHolaMundoConCallback(function (mensaje) {
+            console.log(mensaje)
+        })
+
+        //  Promises Básicas
+        // Ejercicio 2: Promises: Crea una Promise que se resuelva después de 3 segundos y luego imprima "Promise resuelta" cuando se cumpla.
+        /*Crea la Promesa: Utiliza la sintaxis new Promise((resolve, reject) => { ... }).         
+                    */
+        const miPromesa = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, 3000);
+        });
+
+        miPromesa.then(() => {
+            console.log("Promise resuelta");
+        });
+
+        // Ejercicio 3: async/await: Define una función asincrónica que espere 1 segundo y luego devuelva una cadena que diga "Operación completada". Utiliza async/await.
+
+        async function operacionAsincrona() {
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return "Operación completada";
+        }
+
+        operacionAsincrona()
+            .then(resultado => {
+                console.log(resultado);
+            });
+
+        //Manejo de Errores con Promises
+        //      Ejercicio 4: Manejo de errores con Promises: Crea una Promise que se rechace después de 2 segundos y captura el error para imprimir "Error: Promise rechazada".
+        //    Encadenamiento de Promises
+
+        const promesaConError = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject("Promise rechazada");
+            }, 2000);
+        });
+
+        promesaConError
+            .then(resultado => {
+                console.log(resultado);
+            })
+            .catch(error => {
+                console.log(`Error: ${error}`);
+            });
+
+        //Ejercicio 5: Encadenamiento de Promises: Crea tres Promises consecutivas, donde cada una se resuelva después de 1 segundo y devuelva un número diferente. Luego, encadena las tres Promises para sumar los resultados y mostrar el resultado final.
+        //Llamadas a APIs
+
+
+    </script>
+
+</body>
+
+</html>

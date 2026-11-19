@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <script>
+
+  let arraySalaries = Object.entries(salaries);
+			
+			let setSalaries = Array.from(new Set(Object.values(salaries)));
+			
+			let bigSalary = Math.max(...setSalaries);
+			
+			let [name, salary] = arraySalaries.find(([name, salary]) => salary === bigSalary);
+
+			alert(`El salario más alto es de ${name} con ${salary}`); 
+
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script>
+
+        class Libro {
+
+            constructor(titulo, autor) {
+                this.titulo = titulo;
+                this.autor = autor;
+                this.marcarLeido = false;
+            }
+            marcarcomoleido() {
+                this.marcarLeido = true;
+            }
+
+            get titu() {
+                return this.titulo;
+            }
+
+            get aut() {
+                return this.autor;
+            }
+
+
+        }
+
+        class Biblioteca {
+
+            static #libros = [];
+
+            static insertarlibro(libro) {
+                this.#libros.push(libro);
+
+            };
+
+            static leido() {
+                return this.#libros.filter(libro => libro.marcarLeido == true)
+            }
+
+        }
+
+        let libro1 = new Libro("Autocad", "Cristhian");
+        let libro2 = new Libro("Porgramacion", "Roberto");
+        libro2.marcarcomoleido();
+        libro1.marcarcomoleido();
+
+        Biblioteca.insertarlibro(libro1);
+        Biblioteca.insertarlibro(libro2);
+
+        let librosleidos = Biblioteca.leido();
+
+        for (let libro of librosleidos) {
+            alert(libro.titu)
+        }
+
+    </script>
+
+</body>
+
+</html>

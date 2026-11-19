@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script>
+
+      
+      const NUMERO = 100;
+      function SumFor(n) {
+        let res = 0;
+        for (let i = 1; i <= n; i++) {
+          res += i;
+        }
+        return res;
+      }
+      function SumRec(n) {
+        return n == 1 ? 1 : n + SumRec(n - 1);
+      }
+      function SumArit(n) {
+        let resultado = 0;
+        resultado = (n * (n + 1)) / 2;
+        return resultado;
+      }
+
+      let conFor = SumFor(NUMERO);
+      let conRec = SumRec(NUMERO);
+      let conArit = SumArit(NUMERO);
+      alert(
+        `Resultado haciendo la operación con for: ${conFor}. \n Resultado recursivo: ${conRec}. \n Resultado con operación aritmetica ${conArit} `,
+      );
+   
+
+    </script>
+
+</body>
+
+</html>

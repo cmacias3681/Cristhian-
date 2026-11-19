@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script>
+
+        let matriz = [
+            [-20, -4, -1],
+            [1, 4, 7],
+            [-1, 1, 12]
+        ];
+
+        function up_down_col_sort(matriz) {
+
+            const rows = matriz.length;
+            const cols = matriz[0].length;
+
+            const sorted = matriz.flat().sort((a, b) => a - b);
+
+            const result = Array.from({ length: rows }, () => new Array(cols)); //crea la matriz vacia
+
+            let idx = 0;
+
+            for (let col = 0; col < cols; col++) {
+                if (col % 2 === 0) {
+                    for (let row = 0; row < rows; row++) {
+                        result[row][col] = sorted[idx++];
+                    }
+                } else {
+                    for (let row = rows - 1; row >= 0; row--) {
+                        result[row][col] = sorted[idx++];
+                    }
+                }
+            }
+
+            return result;
+        }
+
+           alert(up_down_col_sort(matriz)); 
+        
+
+
+           /*let matrizOriginal = [
+            [-20, -4, -1],
+            [1, 4, 7],
+            [8, 10, 12]
+        ];
+
+        let matrizUnica = [];
+        for (let fila of matrizOriginal) {
+            matrizUnica = matrizUnica.concat(fila);
+        }
+
+        let matrizOrdenada = [...matrizUnica].sort((a, b) => a - b);
+
+        let filas = matrizOriginal.length;
+        let columnas = matrizOriginal[0].length;
+
+        let matrizSalida = [];
+        for (let f = 0; f < filas; f++) {
+            matrizSalida[f] = [];
+        }
+
+        let i = 0;
+        for (let columna = 0; columna < columnas; columna++) {
+            if (columna % 2 == 0) {
+                for (let fila = 0; fila < filas; fila++) {
+                    matrizSalida[fila][columna] = matrizOrdenada[i++];
+                }
+            } else {
+                for (let fila = filas - 1; fila >= 0; fila--) {
+                    matrizSalida[fila][columna] = matrizOrdenada[i++];
+                }
+            }
+        }
+        console.log(matrizSalida);
+        alert(matrizSalida); */
+    </script>
+
+</body>
+
+</html>

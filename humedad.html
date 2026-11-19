@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script>
+        //Parte 1 (Humedad):
+        //Define una función checkHumidityLevel(humidityPercentage).
+        //Utiliza una estructura condicional (if) para verificar si humidityPercentage > 70. Si se cumple, usa throw new Error(...).
+        function checkHumidityLevel(humidityPercentage) {
+            if (humidityPercentage > 70) {
+                throw new Error('La humedad es demasiado alta');
+            }
+
+        }
+        //Parte 2(Errores personalizados y sobrecalentamiento):
+        //Crea la clase ArgumentError extendiendo de Error.
+        //Crea la clase OverheatingError extendiendo de Error.Su constructor(temperature) debe aceptar la temperatura y asignarla a this.temperature = temperature; (además de llamar a super(...) opcionalmente con un mensaje descriptivo).
+        //Define la función reportOverheating(temperature).Si temperature === null, lanza new ArgumentError().Si temperature > 500, lanza new OverheatingError(temperature).
+
+        class ArgumentError extends Error {
+            constructor(message) {
+                super(message);
+                this.name = 'ArgumentError';
+            }
+        }
+
+        class OverheatingError extends Error {
+            constructor(temperature) {
+                super(`Temperatura muy alta: ${temperature}°C`);
+                this.name = 'OverheatingError';
+                this.temperature = temperature;
+            }
+        }
+
+        function reportOverheating(temperature) {
+            if (temperature == null) {
+                throw new ArgumentError('El sensor está roto');
+            }
+            if (temperature > 500) {
+                throw new OverheatingError(temperature);
+            }
+
+        }
+
+        //Parte 3(Monitoreo con try...catch):
+
+        //Define la función monitorTheMachine(actions).
+        //Dentro, coloca un bloque try donde ejecutes actions.check().
+        //En el bloque catch (error), utiliza instanceof para evaluar qué tipo de error ocurrió:
+        //Si error instanceof ArgumentError, llama a actions.alertDeadSensor().
+        //Si error instanceof OverheatingError, evalúa su temperatura: si es menor a 600, llama a actions.alertOverheating(); si es mayor o igual, llama a actions.shutdown().
+        //De lo contrario (else), relanza el error con throw error;.
+
+        function monitorTheMachine(actions) {
+            try {
+                actions.check();
+            } catch (error) {
+                if (error instanceof ArgumentError) {
+                    actions.alertDeadSensor();
+                } else if (error instanceof OverheatingError) {
+                    if (error.temperature < 600) {
+                        actions.alertOverheating();
+                    } else {
+                        actions.shutdown();
+                    }
+                } else {
+                    throw error;
+                }
+            }
+        }
+
+
+        console.log("=== 1. PRUEBAS DE HUMEDAD ===");
+        try {
+            checkHumidityLevel(25); // Pasa sin error
+            console.log("Humedad 50%: OK (Sin errores)");
+
+            checkHumidityLevel(75); // Lanza error
+        } catch (error) {
+            console.log("Capturado en humedad:", error.message);
+        }
+
+    </script>
+</body>
+
+</html>

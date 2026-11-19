@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script>
+
+        function fecha(fechaRara) {
+
+            const MONTHS = {
+                "Jan": '01',
+                "Feb": '02',
+                "Mar": '03',
+                "Apr": '04',
+                "May": '05',
+                "Jun": '06',
+                "Jul": '07',
+                "Aug": '08',
+                "Sep": '09',
+                "Oct": '10',
+                "Nov": '11',
+                "Dec": '12'
+            };
+
+            let fechaFormateada = "";
+            let cabezera = fechaRara.split(",");
+            let [mesDia, anyo, horaMinuto] = cabezera;
+            let [mes, dia] = mesDia.split(" ");
+            let [hora, minuto] = horaMinuto.split(":");
+            mes = MONTHS[mes];
+            hora = minuto.includes("a") ? hora : (Number(hora) + 12).toString() ;
+            hora = Number(hora.trim()) < 10 ? "0" + hora.trim() : hora.trim();
+            minuto = minuto.replace("am", '').replace("pm", '');
+            fechaFormateada += anyo + "-";
+            fechaFormateada += mes + "-";
+            fechaFormateada += dia + "T";
+            fechaFormateada += hora + ":";
+            fechaFormateada += minuto + "";
+
+
+            return fechaFormateada
+
+        }
+        alert(fecha("Feb 20, 2012, 3:12pm")); 
+    </script>
+
+</body>
+
+</html>

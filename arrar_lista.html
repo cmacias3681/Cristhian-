@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+    <script>
+    let data = {
+      "Fish": {
+        "trout": {},
+        "salmon": {}
+      },
+
+      "Tree": {
+        "Huge": {
+          "sequoia": {},
+          "oak": {}
+        },
+        "Flowering": {
+          "apple tree": {},
+          "magnolia": {}
+        }
+      }
+    }
+
+   /* let ul = document.createElement('ul');
+
+    for (let [clave, valor] of Object.entries(data)) {
+
+      let elem = document.createElement('li');
+      elem.innerHTML = clave;
+
+      ul.append(elem);
+      console.log(clave);
+
+      let ul2 = document.createElement('ul');
+      ul.append(ul2);
+
+      for (let [clave2, valor2] of Object.entries(valor)) {
+
+        let elem2 = document.createElement('li');
+        elem2.innerHTML = clave2;
+
+        ul2.append(elem2);
+
+        console.log(clave2);
+
+        let ul3 = document.createElement('ul');
+        ul2.append(ul3);
+
+        for (let [clave3, valor3] of Object.entries(valor2)) {
+          let elem3 = document.createElement('li');
+          elem3.innerHTML = clave3;
+
+          ul3.append(elem3);
+
+          console.log(clave3);
+
+        }
+
+      }
+
+
+    }
+    document.body.append(ul);*/
+
+
+    function createTree(obj) {
+      if (!obj || typeof obj !== "object") {
+        return null;
+      }
+
+      const entries = Object.entries(obj);
+      if (entries.length === 0) {
+        return null;
+      }
+
+      const ul = document.createElement("ul");
+
+      for (const [clave, valor] of entries) {
+        const li = document.createElement("li");
+        li.textContent = clave;
+
+        const subTree = createTree(valor);
+        if (subTree) {
+          li.append(subTree);
+        }
+
+        ul.append(li);
+      }
+
+      return ul;
+    }
+
+    const tree = createTree(data);
+    if (tree) {
+      document.body.append(tree);
+    }
+
+
+    createTree(data);
+
+    </script>
+ 
+</body>
+
+</html>

@@ -1,8 +1,49 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 10px auto;
+            width: 470px;
+        }
+
+        h3 {
+            margin: 0;
+            padding-bottom: .3em;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin: 0;
+            padding: 0 0 .5em;
+        }
+
+        .pane {
+            position: relative;
+            background-color: #e9f5e1;
+            /* verde claro suave */
+            padding: 16px 40px 16px 18px;
+            /* espacio a la derecha para no chocar con [x] */
+            border-bottom: 1px solid #d4e6c8;
+            /* separador sutil entre bloques */
+        }
+
+        .remove-button {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #a32a2a;
+            /* rojo/granate */
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -11,27 +52,88 @@
             <tr>
                 <th data-type="number">Age</th>
                 <th data-type="string">Name</th>
+                <th data-type="string">Nota</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>5</td>
                 <td>John</td>
+                <td>5</td>
             </tr>
             <tr>
                 <td>10</td>
                 <td>Ann</td>
+                <td>8</td>
             </tr>
-            ...
+            <tr>
+                <td>35</td>
+                <td>Alex</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>21</td>
+                <td>iker</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>21</td>
+                <td>Alfonso</td>
+                <td>1</td>
+            </tr>
         </tbody>
     </table>
-
     <script>
-        
+        grid.addEventListener("click", function (event) {
+            let tabla = [];
+            let elem = event.target;
+            let ths = grid.querySelectorAll("th");
+            let trs = grid.querySelectorAll("tr");
+            if (elem.tagName != "TH") return;
+            let fila = [];
+            for (let i of ths) {
+                fila.push(i.textContent.trim())
+            }
+            tabla.push(fila);
+            for (let tr of trs) {
+                fila = []
+                let tds = tr.querySelectorAll("td");
+                if (tds.length == 0) continue;
+                for (let td of tds) {
+                    fila.push(td.textContent.trim())
+                }
+                tabla.push(fila);
+            }
+            let indice = tabla[0].indexOf(elem.innerHTML.trim());
+            // tabla.slice(1).sort((a, b) => {
+            //     if(typeof a[0] === "number") return a[0] - b[0];
+            //     return a[1].localeCompare(b[1]);
+            // })
+            let filasOrdenadas = tabla.slice(1).sort((a, b) => {
+                let valA = a[indice];
+                let valB = b[indice];
 
+                // Si ambos valores son numéricos, ordena como número
+                if (!isNaN(valA) && !isNaN(valB) && valA !== "" && valB !== "") {
+                    return Number(valA) - Number(valB);
+                }
 
-        
+                // Si no, ordena como texto
+                return String(valA).localeCompare(String(valB));
+            })
 
+            // Reconstruye la tabla manteniendo tabla[0] (encabezados) en su lugar
+            tabla = [tabla[0], ...filasOrdenadas];
+            let valoreso = tabla.slice(1).flat();
+            let celdasTd = grid.querySelectorAll("td")
+            celdasTd.forEach((td, i) => {
+                if (i < valoreso.length) {
+                    td.innerHTML = valoreso[i]
+                }
+            })
+            console.log(tabla)
+            console.log(indice)
+        })
     </script>
 </body>
 

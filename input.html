@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+</head>
+
+<body>
+    <input type="button" id="hider" value="Haz click para desaparecer el texto" />
+    <div id="text">Texto</div>
+
+    <script>
+        let texto = document.getElementById("text");
+        let boton = document.getElementById("hider");
+
+        function eliminar() {
+            texto.remove();
+        }
+       boton.onclick = eliminar;
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="my.css">
+  <meta charset="utf-8">
+</head>
+<body>
+  <ul>
+    <li>Clica el div para editar.</li>
+    <li>Enter o blur guarda el resultado.</li>
+  </ul>
+  Se permite HTML.
+  <div id="view">Text</div>
+
+  <script>
+    const editor = document.createElement('textarea');
+    const view = document.getElementById('view');
+    editor.setAttribute('class', 'view');
+
+    view.addEventListener('click', () => {
+      editor.value = view.innerHTML.trim();
+      view.replaceWith(editor);
+      editor.setAttribute('class', 'edit');
+      editor.focus();
+    });
+
+    editor.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        editor.blur();
+      }
+    });
+
+    editor.addEventListener('blur', () => {
+      view.innerHTML = editor.value;
+      editor.replaceWith(view);
+      editor.setAttribute('class', 'view');
+    });
+  </script>
+</body>
+</html>

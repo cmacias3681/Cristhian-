@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario accesible (GET y POST en JavaScript)</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --border: #595959;
+      /* Contraste superior a 3:1 para bordes de controles */
+      --primary: #0056b3;
+      /* Contraste superior a 4.5:1 con texto blanco */
+      --primary-hover: #003d82;
+      --focus: #ff9900;
+      --error: #b00020;
+      --surface: #f4f6f8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
+      color: var(--text);
+      background-color: var(--bg);
+      max-width: 42rem;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    legend {
+      font-weight: 700;
+      padding: 0 0.5rem;
+    }
+
+    .campo {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .ayuda {
+      font-size: 0.875rem;
+      color: #4a4a4a;
+      margin: 0 0 0.35rem 0;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.65rem;
+      font-size: 1rem;
+      color: var(--text);
+      background-color: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 4px;
+    }
+
+    /* Indicador de foco visible (WCAG 2.4.7) */
+    input:focus,
+    button:focus {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    input[aria-invalid="true"] {
+      border-color: var(--error);
+    }
+
+    .error-texto {
+      color: var(--error);
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-top: 0.25rem;
+      min-height: 1.25rem;
+    }
+
+    .acciones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      padding: 0.65rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      background-color: var(--primary);
+      border: 2px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button[data-metodo="GET"] {
+      background-color: #2b547e;
+    }
+
+    .resultado {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background-color: var(--surface);
+      border-left: 4px solid var(--primary);
+      border-radius: 4px;
+    }
+
+    .resultado:empty {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Formulario auto-procesado accesible</h1>
+
+    <form id="miFormulario" novalidate>
+      <fieldset>
+        <legend>Datos del usuario</legend>
+
+        <div class="campo">
+          <label for="nombre">Nombre completo (obligatorio)</label>
+          <input type="text" id="nombre" name="nombre" autocomplete="name" required aria-required="true"
+            aria-describedby="error-nombre">
+          <div id="error-nombre" class="error-texto" aria-live="polite"></div>
+        </div>
+
+        <div class="campo">
+          <label for="correo">INGRESA CORREO (obligatorio)</label>
+          <input type="email" id="correo" name="correo" autocomplete="correo" required aria-required="true"
+            aria-describedby="error-correo">
+          <div id="error-correo" class="error-texto" aria-live="polite"></div>
+        </div>
+
+        <div class="campo">
+          <label for="edad">Edad (obligatorio)</label>
+          <p id="ayuda-edad" class="ayuda">Introduce un número entero igual o mayor que 0.</p>
+          <input type="number" id="edad" name="edad" min="0" step="1" required aria-required="true"
+            aria-describedby="ayuda-edad error-edad">
+          <div id="error-edad" class="error-texto" aria-live="polite"></div>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" data-metodo="POST">Enviar por POST</button>
+          <button type="submit" data-metodo="GET">Enviar por GET</button>
+        </div>
+      </fieldset>
+    </form>
+
+    <!-- Región viva para anunciar el resultado a lectores de pantalla (WCAG 4.1.3) -->
+    <section id="resultado" class="resultado" role="status" aria-live="polite" tabindex="-1"></section>
+  </main>
+
+  <script>
+    const formulario = document.getElementById("miFormulario");
+    const inputNombre = document.getElementById("nombre");
+    const inputCorreo = document.getElementById("correo");
+    const inputEdad = document.getElementById("edad");
+    const errorNombre = document.getElementById("error-nombre");
+    const errorCorreo = document.getElementById("error-correo");
+    const errorEdad = document.getElementById("error-edad");
+    const cajaResultado = document.getElementById("resultado");
+
+    // 1. Al cargar la página, comprueba si llegan datos por GET en la URL
+    window.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("nombre") || params.has("correo") || params.has("edad")) {
+        const nombreUrl = params.get("nombre") || "";
+        const correoUrl = params.get("correo") || "";
+        const edadUrl = params.get("edad") || "";
+        inputNombre.value = nombreUrl;
+        inputCorreo.value = correoUrl;
+        inputEdad.value = edadUrl;
+        procesarDatos(nombreUrl, edadUrl, correoUrl, "GET");
+      }
+    });
+
+    // 2. Intercepta el envío (tanto POST como GET)
+    formulario.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+
+      // Detecta qué botón disparó el envío (POST o GET)
+      const botonPulsado = evento.submitter;
+      const metodo = botonPulsado ? botonPulsado.dataset.metodo : "POST";
+
+      const datos = new FormData(formulario);
+      const nombre = (datos.get("nombre") || "").toString();
+      const correo = (datos.get("correo") || "").toString();
+      const edad = (datos.get("edad") || "").toString();
+
+      if (!validarCampos(nombre, correo, edad)) {
+        return;
+      }
+
+      // Si es GET, actualiza la URL con los parámetros sin recargar la página
+      if (metodo === "GET") {
+        const url = new URL(window.location.href);
+        url.searchParams.set("nombre", nombre.trim());
+        url.searchParams.set("correo", correo.trim());
+        url.searchParams.set("edad", edad.trim());
+        window.history.pushState({}, "", url);
+      } else {
+        // Si es POST, limpia parámetros previos de la URL si los hubiera
+        window.history.pushState({}, "", window.location.pathname);
+      }
+
+      procesarDatos(nombre, correo, edad, metodo);
+    });
+
+    function validarCampos(nombre, correo, edad) {
+      let esValido = true;
+      let primerCampoInvalido = null;
+      const regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      // Limpiar estados previos
+      limpiarError(inputNombre, errorNombre);
+      limpiarError(inputEdad, errorEdad);
+
+      // Validar nombre
+      if (nombre.trim() === "") {
+        marcarError(inputNombre, errorNombre, "Escribe tu nombre completo.");
+        esValido = false;
+        primerCampoInvalido = inputNombre;
+      }
+
+      //validacion correo
+      if (correo.trim() === "") {
+        marcarError(inputCorreo, errorCorreo, "Escribe tu correo.");
+        esValido = false;
+        primerCampoInvalido = inputCorreo;
+      } else if (!regexCorreo.test(correo)) {
+        marcarError(inputCorreo, errorCorreo, "Introduce un correo electrónico válido.");
+        esValido = false;
+        primerCampoInvalido = inputCorreo;
+      }
+
+      // Validar edad
+      const edadNumero = Number(edad);
+      if (edad.trim() === "" || !Number.isInteger(edadNumero) || edadNumero < 0) {
+        marcarError(inputEdad, errorEdad, "Introduce una edad válida (0 o superior).");
+        esValido = false;
+        if (!primerCampoInvalido) primerCampoInvalido = inputEdad;
+      }
+
+      // Mover el foco al primer error detectado (WCAG 3.3.1)
+      if (primerCampoInvalido) {
+        primerCampoInvalido.focus();
+      }
+
+      return esValido;
+    }
+
+    function marcarError(input, contenedorError, mensaje) {
+      input.setAttribute("aria-invalid", "true");
+      contenedorError.textContent = mensaje;
+    }
+
+    function limpiarError(input, contenedorError) {
+      input.removeAttribute("aria-invalid");
+      contenedorError.textContent = "";
+    }
+
+    function procesarDatos(nombre, correo, edad, metodo) {
+      const nombreLimpio = nombre.trim();
+      const correoLimpio = correo.trim();
+      const edadNumero = Number(edad);
+      const etapa = edadNumero >= 18 ? "mayor de edad" : "menor de edad";
+
+      // Uso de textContent para evitar inyección XSS
+      cajaResultado.textContent =
+        `Recibido por ${metodo}: ${nombreLimpio} tiene ${edadNumero} años (${etapa}).`;
+
+      // Traslada el foco al resultado para facilitar la lectura
+      cajaResultado.focus();
+    }
+  </script>
+</body>
+
+</html>
